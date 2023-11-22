@@ -6,6 +6,7 @@ SOCKS5 proxy is also available in container and served by [glider](https://githu
 
 This work is based on following projects:
  * [openfortivpn-haproxy](https://github.com/jeffre/openfortivpn-haproxy) - base, with changes enabling easy 2FA authentication for Fortinet VPN
+ * [docker-forticlient](https://github.com/poyaz/docker-forticlient) - generic workflow
  * [docker-fortivpn-socks5](https://github.com/Tosainu/docker-fortivpn-socks5) - glider build
  * [docker-forticlient-with-proxy](https://github.com/henry42/docker-forticlient-with-proxy) - setup masquerade
  
