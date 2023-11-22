@@ -9,13 +9,13 @@ This work is based on following projects:
  * [docker-fortivpn-socks5](https://github.com/Tosainu/docker-fortivpn-socks5) - glider build
  * [docker-forticlient-with-proxy](https://github.com/henry42/docker-forticlient-with-proxy) - setup masquerade
  
-This work is focused on 2FA-only authentication and expect a text file to be written with 2FA code prior to VPN executing:
+This work is focused on 2FA (Two-Factor) authentication and expect a text file to be written with 2FA token prior to VPN starting:
  * VPN is not starting with container
  * 'inotifywait' is looking for any writes (close_write,moved_to,create) in specific folder
  * when new 2FA token is available in '2fa.txt' file, any existent VPN instance is terminated and new one connected using provided username+password+token
  * no automatic restart for VPN service
 
-# Create docker image
+# Create Docker Image
 1. Clone this repository
 
         git clone https://github.com/gooorooox/docker-forti-proxy-2fa
@@ -24,9 +24,19 @@ This work is focused on 2FA-only authentication and expect a text file to be wri
 
         docker build ./docker-forti-proxy-2fa -t "gooorooox/docker-forti-proxy-2fa:latest"
 
-# Deploy docker container
+# Deploy Docker Container
 
-## Configure forwarded ports
+## Environment Variables
+ * `VPN_ADDR`: IP address and a port of the server, separated by colon
+ * `VPN_USER`: username
+ * `VPN_PASS`: password
+ * `VPN_2FA_DIR`: folder for logs and 2FA token file
+ * `VPN_2FA_FILE`: full path to 2FA token file
+ * `ENABLE_IPTABLES_LEGACY`: set to any value to force iptables-legacy (not needed for Alpine)
+ * `ENABLE_PORT_FORWARDING`: set to any value to enable ports forwarding
+ * `SOCKS_PROXY_PORT`: glider port to listen
+
+## Configure Forwarded Ports
 To configure forwarded ports, use environment variables with names that start
 with `PORT_FORWARD` and contain a special string (outlined below). More than
 one port can be forwarded by using a unique variable name (`PORT_FORWARD1`,
@@ -43,7 +53,7 @@ like one of the following:
 
 # Examples
 
-### Sample compose for VPN and SOCKS5 proxy
+### Sample Compose for VPN and SOCKS5 Proxy
 ```
 version: "2.3"
 services:
@@ -62,7 +72,6 @@ services:
       - VPN_ADDR=1.1.1.1:443
       - VPN_USER=myusername
       - VPN_PASS=mysecretpassword
-      - VPN_TIMEOUT=90
       - VPN_2FA_DIR=/tmp/2fa/
       - VPN_2FA_FILE=/tmp/2fa/2fa.txt
       - SOCKS_PROXY_PORT=8443
@@ -78,13 +87,14 @@ Once token is provided, you can check your VPN connection with following command
 ```
 curl -x http://<HOST-IP>:8443 --insecure -I https://<VPN-ONLY-IP>
 ```
-### Batch script to enter token/start VPN
+Log files of VPN and Proxy are available under `VPN_2FA_DIR`\logs folder.
+
+### Batch Script to Enter Token/Start VPN
 ```
 @echo off
-TITLE FortiVPN 2FA
+title FortiVPN 2FA
 set FILE_PATH=x:\shared_folder\vpn\2fa.txt
 set /P sec_token="Enter token (6 digits):"
 echo %sec_token% > %FILE_PATH%
 echo OK
 ```
-
