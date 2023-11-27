@@ -82,6 +82,9 @@ services:
       - 8443
     restart: "unless-stopped"
 ```
+**SYNOLOGY USERS NOTE**: current DSM (7.2.1-69057 Update 3) might require to 
+enable "Execute control using high privilege" capability in order to allow /dev/ppp device management.
+
 Once connected, SOCKS5 proxy will be running on port 8443.
 At this point VPN is not started yet, you need to enter a token to '/tmp/2fa/2fa.txt' file.
 Once token is provided, you can check your VPN connection with following command:
