@@ -69,8 +69,9 @@ while read -r directory action file; do
     echo "====================================================="
     VPN_LOG=${LOGS_FOLDER}/vpn.log
     rm -f $VPN_LOG
+    echo "`date` [LISTENER] INFO: VPN Log started." > $VPN_LOG
     CMD="/usr/bin/openfortivpn ${VPN_ADDR} -u ${VPN_USER} -p ${VPN_PASS} -o ${VPN_2FA_TOKEN} --trusted-cert ${DIGEST}" 
-    eval "${CMD}" &>$VPN_LOG & disown
+    eval "${CMD}" >> $VPN_LOG 2>&1 & disown
     echo "`date` [LISTENER] -> VPN log: ${VPN_LOG}"
     echo "`date` [LISTENER] INFO: Wait for 10 seconds to display VPN connection progress log."
     sleep 10
