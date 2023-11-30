@@ -23,9 +23,14 @@ This work is focused on 2FA (Two-Factor) authentication and expect a text file t
 
 2. Build the image
 
-        docker build ./docker-forti-proxy-2fa -t "gooorooox/docker-forti-proxy-2fa:latest"
+        docker build ./docker-forti-proxy-2fa -t "gooorooo/docker-forti-proxy-2fa:latest"
 
 # Deploy Docker Container
+
+## Docker Hub
+You can get most recent docker image from Docker Hub: 
+
+        docker pull gooorooo/docker-forti-proxy-2fa
 
 ## Environment Variables
  * `VPN_ADDR`: IP address and a port of the server, separated by colon
@@ -59,7 +64,7 @@ like one of the following:
 version: "2.3"
 services:
   vpn:
-    image: gooorooox/docker-forti-proxy-2fa:latest
+    image: gooorooo/docker-forti-proxy-2fa:latest
     container_name: forti_proxy_2fa
     network_mode: bridge
     devices:
