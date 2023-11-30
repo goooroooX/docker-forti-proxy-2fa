@@ -57,6 +57,21 @@ like one of the following:
 `LOCAL_PORT` an integer between 1-65535. If omitted, port 1111 is used.  
 `PROTOCOL` either tcp or udp. If omitted, tcp is used.
 
+## Verify Connection
+
+Once docker container is deployed and started, SOCKS5 proxy will be running on port 8443.
+
+At this point VPN is **not started** yet, you need to enter a token to '/tmp/2fa/2fa.txt' file.
+Once token is provided, you can check your VPN connection with following command:
+```
+curl -x http://<HOST-IP>:8443 --insecure -I https://<VPN-ONLY-IP>
+```
+Log files of VPN and Proxy are available under `VPN_2FA_DIR`\logs folder.
+
+## Note for Synology Users
+Current DSM (7.2.1-69057 Update 3) might require to 
+enable "Execute control using high privilege" capability in order to allow /dev/ppp device management.
+
 # Examples
 
 ### Sample Compose for VPN and SOCKS5 Proxy
@@ -87,17 +102,6 @@ services:
       - 8443
     restart: "unless-stopped"
 ```
-**SYNOLOGY USERS NOTE**: current DSM (7.2.1-69057 Update 3) might require to 
-enable "Execute control using high privilege" capability in order to allow /dev/ppp device management.
-
-Once connected, SOCKS5 proxy will be running on port 8443.
-At this point VPN is not started yet, you need to enter a token to '/tmp/2fa/2fa.txt' file.
-Once token is provided, you can check your VPN connection with following command:
-```
-curl -x http://<HOST-IP>:8443 --insecure -I https://<VPN-ONLY-IP>
-```
-Log files of VPN and Proxy are available under `VPN_2FA_DIR`\logs folder.
-
 ### Batch Script to Enter Token/Start VPN
 ```
 @echo off
